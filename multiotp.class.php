@@ -3967,9 +3967,10 @@ class Multiotp
       // In the logfile, we don't want to have several lines for one entry,
       // therefore we are replacing the "\n" with "; " (or <br /> if we want to debug in HTML mode
       
-      $logfile_content = $log_datetime."\t".$severity_txt."\t".$user_log."\t".$category_log."\t".str_replace("\n", $this->IsDebugViaHtml()?"<br />":"; ", $log_text)."\t".$local_only."\t".$this->GetCreateHost();
-
-      if (($this->GetDisplayLogFlag()) && (!$hide_on_display) && (!$this->GetNoDisplayLogFlag())) {
+      //$logfile_content = $log_datetime."\t".$severity_txt."\t".$user_log."\t".$category_log."\t".str_replace("\n", $this->IsDebugViaHtml()?"<br />":"; ", $log_text)."\t".$local_only."\t".$this->GetCreateHost();
+		$logfile_content = $log_datetime."\t".$severity_txt."\t".$user_log."\t".$category_log."\t".str_replace("\n", $this->IsDebugViaHtml()?"<br />":"; ", $log_text)."\t".$local_only."\t".$this->GetRemoteIP();
+      
+	  if (($this->GetDisplayLogFlag()) && (!$hide_on_display) && (!$this->GetNoDisplayLogFlag())) {
         $display_text = "\nLOG ".$log_datetime.' '.$severity_txt.' '.(("" == $user_log)?"":'(user '.$user_log.') ').$category_log.' '.$log_text."\n";
         if ($this->IsDebugViaHtml()) {
           $display_text = str_replace("\n","<br />\n", htmlentities($display_text));
@@ -4939,7 +4940,13 @@ class Multiotp
       $system_name = nullable_trim(php_uname('n'));
       return $system_name;
   }
-
+  
+//add a function GetRemoteIP() to get client IP 
+  function GetRemoteIP()
+  {
+      $remote_ip = isset($_SERVER['REMOTE_ADDR'])?$_SERVER['REMOTE_ADDR']:'';
+      return $remote_ip;
+  }
 
   function SetDomainName(
       $value
